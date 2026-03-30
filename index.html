@@ -1,0 +1,599 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Advanced AI Prompt Generator</title><style>:root{--primary:#2563eb;--primary-hover:#1d4ed8;--bg-body:#f3f4f6;--bg-container:#fff;--border:#d1d5db;--text-main:#1f2937;--text-muted:#4b5563;--text-help:#047857;--bg-help:#d1fae5;--danger:#dc2626;--danger-hover:#b91c1c;--warning-bg:#fef3c7;--warning-border:#f59e0b;--radius:8px}*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}body{background-color:var(--bg-body);color:var(--text-main);line-height:1.6;padding:20px}.header{text-align:center;margin-bottom:30px}.header h1{color:var(--primary);margin-bottom:10px}.header p{color:var(--text-muted);max-width:600px;margin:0 auto}.layout{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:1400px;margin:0 auto;align-items:start}@media (max-width:900px){.layout{grid-template-columns:1fr}}.panel{background:var(--bg-container);padding:25px;border-radius:var(--radius);box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}.panel h2{border-bottom:2px solid var(--border);padding-bottom:10px;margin-bottom:20px;font-size:1.4rem}.section{margin-bottom:25px;padding-bottom:25px;border-bottom:1px dashed var(--border)}.section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}.section h3{font-size:1.1rem;margin-bottom:5px;color:var(--text-main)}.guidance-box{background-color:var(--bg-help);color:var(--text-help);padding:12px;border-radius:var(--radius);font-size:.9rem;margin-bottom:15px;border-left:4px solid var(--text-help)}.field-guidance{font-size:.85rem;color:var(--text-muted);margin-bottom:5px;display:block}.form-group{margin-bottom:15px}label{display:block;font-weight:600;margin-bottom:5px;font-size:.95rem}input[type=text],input[type=date],select,textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:4px;font-size:1rem;transition:border-color .2s}input:focus,select:focus,textarea:focus{outline:0;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.2)}textarea{resize:vertical;min-height:80px}.btn{padding:10px 15px;border:none;border-radius:4px;font-weight:600;cursor:pointer;transition:background .2s;font-size:.95rem}.btn-primary{background:var(--primary);color:#fff;width:100%;margin-top:10px;font-size:1.1rem;padding:15px}.btn-primary:hover{background:var(--primary-hover)}.btn-secondary{background:#e5e7eb;color:var(--text-main)}.btn-secondary:hover{background:#d1d5db}.btn-danger{background:var(--danger);color:#fff;padding:5px 10px;font-size:.8rem}.btn-danger:hover{background:var(--danger-hover)}.custom-section-item{background:#f9fafb;border:1px solid var(--border);padding:15px;border-radius:var(--radius);margin-bottom:15px;position:relative}.remove-btn-wrapper{text-align:right;margin-bottom:10px}.output-area{background:#1e1e1e;color:#d4d4d4;padding:15px;border-radius:var(--radius);font-family:monospace;white-space:pre-wrap;word-wrap:break-word;min-height:400px;max-height:600px;overflow-y:auto;border:1px solid #333;margin-bottom:20px}.action-buttons{display:flex;gap:10px;flex-wrap:wrap}.action-buttons .btn{flex:1;min-width:120px}.hidden{display:none!important}.char-count{font-size:.8rem;color:var(--text-muted);text-align:right;margin-top:2px}.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:1000}.modal-content{background:var(--bg-container);padding:25px;border-radius:var(--radius);max-width:500px;width:90%;box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}.modal-content h3{color:var(--danger);margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:10px}.lost-data-preview{background:var(--warning-bg);border-left:4px solid var(--warning-border);padding:10px;margin:15px 0;border-radius:4px;max-height:150px;overflow-y:auto;font-family:monospace;font-size:.9rem;white-space:pre-wrap;word-wrap:break-word}.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.modal-actions .btn{flex:1;min-width:140px;padding:10px;font-size:.9rem}.nav-link{display:inline-block;margin-top:15px;padding:8px 16px;background-color:var(--bg-help);color:var(--text-help);text-decoration:none;border-radius:var(--radius);font-weight:600;transition:background .2s}.nav-link:hover{background-color:#bbf7d0}</style></head><body><div class="header"><h1>Advanced AI Prompt Generator</h1><p>Follow the beginner-friendly instructions below to build highly structured, optimized JSON prompts for Large Language Models.<br><a href="instruction-of-use.html" class="nav-link">📖 Need help? See Instruction of Use</a></p></div><div class="layout"><div class="panel"><h2>1. Configure Your Prompt</h2><form id="promptForm" onsubmit="event.preventDefault()"><div class="section"><h3>Select Core Task</h3><div class="guidance-box"><strong>Beginner Guide:</strong> Start by choosing what you want the AI to do. We have 50 pre-built templates. Selecting a template will generate specific input fields. If you prefer to build from scratch without predefined fields, leave it on "No Template".</div><div class="form-group"><label for="templateSelect">Choose a Template *</label><select id="templateSelect" required><option value="no_template">No Template</option></select><span id="templateDesc" class="field-guidance" style="margin-top:5px;font-weight:700;color:var(--primary)"></span></div></div><div id="dynamicFieldsSection" class="section hidden"><h3>Template Details</h3><div class="guidance-box"><strong>Beginner Guide:</strong> These fields are tailored to your chosen template. Fill out as many as possible. The more specific information you provide here, the better the AI's response will be.</div><div id="dynamicFieldsContainer"></div></div><div class="section"><h3>AI Behavior Settings</h3><div class="guidance-box"><strong>Beginner Guide:</strong> These settings tell the AI *how* to think, *who* it is talking to, *what* language to use, and *how* the final output should look. This ensures the response is perfectly tailored to your needs.</div><div class="form-group"><label for="targetAudience">Target Audience</label><span class="field-guidance">Who will be reading the AI's output? The AI will adjust its vocabulary and tone based on this selection.</span><select id="targetAudience" required></select></div><div class="form-group"><label for="reasoningMethod">Reasoning Method</label><span class="field-guidance">How should the AI process your request? 'Step-by-Step' is great for logic, while 'Creative Thinking' is better for brainstorming.</span><select id="reasoningMethod" required></select></div><div class="form-group"><label for="responseFormat">Response Format</label><span class="field-guidance">What structural format should the final answer be delivered in?</span><select id="responseFormat" required></select></div><div class="form-group"><label for="languageSelect">Language</label><span class="field-guidance">In what language should the AI generate its final response?</span><select id="languageSelect" required></select></div></div><div class="section"><h3>Additional Context (Optional)</h3><div class="guidance-box"><strong>Beginner Guide:</strong> Do you have extra instructions, background context, rules, or examples that don't fit above? You can add up to 10 custom sections here. Give your section a clear name (like "Brand Guidelines") and paste your text.</div><div id="customSectionsContainer"></div><button type="button" class="btn btn-secondary" id="addSectionBtn" onclick="addCustomSection()">+ Add Custom Section (<span id="sectionCount">0</span>/10)</button></div><button type="button" class="btn btn-primary" onclick="generatePrompt()">Generate Structured Prompt</button></form></div><div class="panel"><h2>2. Your Generated Prompt</h2><div class="guidance-box"><strong>Beginner Guide:</strong> Your generated prompt appears below in JSON format (highly organized for AI). Review it, then copy or download it to paste into ChatGPT, Claude, or any AI tool.</div><div id="outputArea" class="output-area">{ "Message": "Your generated prompt will appear here." }</div><div class="action-buttons"><button type="button" class="btn btn-secondary" onclick="copyJSON()">📋 Copy JSON</button> <button type="button" class="btn btn-secondary" onclick="copyMarkdown()">📋 Copy Markdown</button> <button type="button" class="btn btn-secondary" onclick="downloadFile(&quot;json&quot;)">⬇️ Download JSON</button> <button type="button" class="btn btn-secondary" onclick="downloadFile(&quot;markdown&quot;)">⬇️ Download MD</button></div><p id="actionFeedback" style="color:var(--text-help);margin-top:10px;text-align:center;font-weight:700;height:20px"></p></div></div><div id="warningModal" class="modal-overlay hidden"><div class="modal-content"><h3>⚠️ Warning: Potential Data Loss</h3><p>You are changing the template type. Fields that do not exist in the new template will be removed. The following entered data will be lost:</p><div id="lostDataPreview" class="lost-data-preview"></div><p style="font-size:.85rem;color:var(--text-muted);margin-bottom:5px">You can copy this lost data to your clipboard before proceeding, proceed anyway, or cancel the change.</p><div class="modal-actions"><button type="button" class="btn btn-primary" onclick="confirmTemplateChange(&quot;copy&quot;)">📋 Copy Data & Proceed</button> <button type="button" class="btn btn-danger" onclick="confirmTemplateChange(&quot;proceed&quot;)">Proceed Anyway</button> <button type="button" class="btn btn-secondary" onclick="cancelTemplateChange()">Cancel</button></div></div></div><script>// --- 1. Data Library (50 Templates) ---
+	const templatesData = [{
+			"TemplateName": "Social Media Content Planner",
+			"Description": "Schedule posts, captions, hashtags, and platforms.",
+			"Fields": ["Platform", "Content", "Hashtags", "Status"]
+		}, {
+			"TemplateName": "Blog Post Outline Generator",
+			"Description": "Headings, subheadings, keywords, and content flow.",
+			"Fields": ["Title", "Author", "Outline", "Keywords"]
+		}, // Rule 24
+		{
+			"TemplateName": "Email Marketing Campaign",
+			"Description": "Subject lines, body text, CTA, and schedule.",
+			"Fields": ["Subject", "Body", "CTA", "Recipients", "SendDate", "Status"]
+		}, {
+			"TemplateName": "Customer Feedback Analyzer",
+			"Description": "Sentiment analysis, category tagging, follow-ups.",
+			"Fields": ["CustomerName", "FeedbackText", "Category", "Sentiment", "FollowUpRequired"]
+		}, {
+			"TemplateName": "E-commerce Product Listing",
+			"Description": "Product name, description, price, SKU, images.",
+			"Fields": ["ProductName", "Description", "Price", "SKU", "Images", "Category"]
+		}, {
+			"TemplateName": "Project Task Manager",
+			"Description": "Tasks, deadlines, priorities, assignees.",
+			"Fields": ["TaskName", "Description", "Assignee", "Priority", "Deadline", "Status"]
+		}, {
+			"TemplateName": "AI Chatbot Response Generator",
+			"Description": "Intents, responses, suggested actions.",
+			"Fields": ["IntentName", "SampleUserInput", "BotResponse", "SuggestedActions"]
+		}, {
+			"TemplateName": "Event Planning Checklist",
+			"Description": "Tasks, dates, budget, vendors.",
+			"Fields": ["TaskName", "AssignedTo", "DueDate", "Budget", "Vendor", "Status"]
+		}, {
+			"TemplateName": "Recipe Organizer",
+			"Description": "Ingredients, steps, cooking time, dietary info.",
+			"Fields": ["Title", "Ingredients", "Steps", "CookingTime", "Servings", "DietaryRestrictions"]
+		}, {
+			"TemplateName": "Learning Module Creator",
+			"Description": "Modules, lessons, quizzes, resources.",
+			"Fields": ["Title", "Lessons", "Quizzes", "Resources"]
+		}, // Rule 26
+		{
+			"TemplateName": "Job Application Tracker",
+			"Description": "Applicant data, position, status, interview notes.",
+			"Fields": ["Name", "PositionApplied", "Status", "ResumeLink", "InterviewNotes"]
+		}, {
+			"TemplateName": "Fitness Routine Builder",
+			"Description": "Exercises, sets, reps, progress tracking.",
+			"Fields": ["ExerciseName", "Sets", "Reps", "Weight", "Notes", "Date"]
+		}, {
+			"TemplateName": "Travel Itinerary Planner",
+			"Description": "Dates, destinations, activities, costs.",
+			"Fields": ["Destination", "StartDate", "EndDate", "Activities", "Cost", "Notes"]
+		}, {
+			"TemplateName": "Marketing Strategy Blueprint",
+			"Description": "Goals, channels, campaigns, KPIs, timeline.",
+			"Fields": ["Goal", "Channels", "Campaigns", "KPIs", "Timeline", "Owner"]
+		}, {
+			"TemplateName": "Book Library Organizer",
+			"Description": "Title, author, genre, rating, reading status.",
+			"Fields": ["Title", "Author", "Genre", "Rating", "Status", "Notes"]
+		}, {
+			"TemplateName": "Budget & Expense Tracker",
+			"Description": "Categories, amounts, dates, notes.",
+			"Fields": ["Category", "Amount", "Date", "PaymentMethod", "Notes"]
+		}, {
+			"TemplateName": "Personal Journal Entry",
+			"Description": "Date, mood, activities, reflections.",
+			"Fields": ["Date", "Mood", "Activities", "Reflection"]
+		}, {
+			"TemplateName": "Podcast Episode Planner",
+			"Description": "Episode title, topic, guests, script, publish info.",
+			"Fields": ["Title", "Topic", "Guests", "Script", "Status"]
+		}, {
+			"TemplateName": "Survey Data Collector",
+			"Description": "Survey questions, responses, metadata.",
+			"Fields": ["Questions", "Responses", "RespondentID", "Date", "Metadata"]
+		}, {
+			"TemplateName": "Customer Support Ticketing",
+			"Description": "Ticket ID, issue, priority, status, resolution.",
+			"Fields": ["CustomerName", "IssueDescription", "Priority", "Status", "Resolution", "AssignedTo"]
+		}, {
+			"TemplateName": "Product Comparison Table",
+			"Description": "Features, pros, cons, ratings.",
+			"Fields": ["ProductName", "Features", "Pros", "Cons", "Rating"]
+		}, {
+			"TemplateName": "Content Idea Brainstormer",
+			"Description": "Idea, category, audience, notes.",
+			"Fields": ["IdeaTitle", "Category", "Notes"]
+		}, // Rule 25
+		{
+			"TemplateName": "Software Bug Tracker",
+			"Description": "Bug description, severity, reproduction steps, assignee.",
+			"Fields": ["Title", "Description", "Severity", "StepsToReproduce", "AssignedTo", "Status"]
+		}, {
+			"TemplateName": "Meeting Agenda Planner",
+			"Description": "Agenda items, owner, duration, notes.",
+			"Fields": ["MeetingDate", "AgendaItems", "Owner", "Duration", "Notes"]
+		}, {
+			"TemplateName": "Influencer Collaboration Tracker",
+			"Description": "Influencer name, platform, engagement, campaign, status.",
+			"Fields": ["InfluencerName", "Platform", "EngagementMetrics", "CampaignName", "Status"]
+		}, {
+			"TemplateName": "Habit Tracker",
+			"Description": "Habit name, frequency, progress, streak.",
+			"Fields": ["HabitName", "Frequency", "Progress", "Streak", "Notes"]
+		}, {
+			"TemplateName": "Story Plot Generator",
+			"Description": "Characters, setting, conflict, resolution.",
+			"Fields": ["Title", "Characters", "Setting", "Conflict", "Resolution"]
+		}, {
+			"TemplateName": "AI Prompt Repository",
+			"Description": "Prompt, category, intended output, examples.",
+			"Fields": ["PromptText", "Category", "IntendedOutput", "Examples"]
+		}, {
+			"TemplateName": "Sales Lead Tracker",
+			"Description": "Lead name, contact info, stage, follow-up notes.",
+			"Fields": ["LeadName", "ContactInfo", "Stage", "FollowUpNotes", "AssignedTo"]
+		}, {
+			"TemplateName": "Multimedia Content Library",
+			"Description": "Media type, title, description, tags, storage location.",
+			"Fields": ["MediaType", "Title", "Description", "Tags", "StorageLocation"]
+		}, {
+			"TemplateName": "Code Snippet Organizer",
+			"Description": "Language, snippet, description, tags.",
+			"Fields": ["Language", "Code", "Description", "Tags"]
+		}, {
+			"TemplateName": "Press Release Generator",
+			"Description": "Headline, date, key points, quote, company info.",
+			"Fields": ["Headline", "Date", "KeyPoints", "Quote", "CompanyInfo"]
+		}, {
+			"TemplateName": "Influencer Marketing Report",
+			"Description": "Metrics, engagement, reach, conversion, ROI.",
+			"Fields": ["InfluencerName", "Metrics", "Engagement", "Reach", "Conversion", "ROI"]
+		}, {
+			"TemplateName": "Product Roadmap Planner",
+			"Description": "Features, timeline, priorities, owner.",
+			"Fields": ["Feature", "Timeline", "Priority", "Owner"]
+		}, {
+			"TemplateName": "SEO Keyword Planner",
+			"Description": "Keyword, search volume, difficulty, CPC.",
+			"Fields": ["Keyword", "SearchVolume", "Difficulty", "CPC", "Notes"]
+		}, {
+			"TemplateName": "Video Script Creator",
+			"Description": "Scene, dialogue, duration, visual cues.",
+			"Fields": ["SceneDescription", "Dialogue", "Duration", "VisualCues"]
+		}, {
+			"TemplateName": "Advertisement Copy Generator",
+			"Description": "Headline, body, CTA, target audience.",
+			"Fields": ["Headline", "BodyText", "CTA", "TargetAudience"]
+		}, {
+			"TemplateName": "Customer Journey Map",
+			"Description": "Stage, touchpoints, emotions, pain points.",
+			"Fields": ["Stage", "Touchpoints", "CustomerEmotion", "PainPoints"]
+		}, {
+			"TemplateName": "Meeting Minutes Recorder",
+			"Description": "Date, attendees, decisions, action items.",
+			"Fields": ["Date", "Attendees", "Decisions", "ActionItems"]
+		}, {
+			"TemplateName": "Goal Tracker",
+			"Description": "Goal name, target date, progress, metrics.",
+			"Fields": ["GoalName", "TargetDate", "Progress", "Metrics", "Notes"]
+		}, {
+			"TemplateName": "Workshop Agenda",
+			"Description": "Session title, duration, facilitator, notes.",
+			"Fields": ["Title", "Duration", "Facilitator", "Notes"]
+		}, {
+			"TemplateName": "Product Review Collector",
+			"Description": "Reviewer, rating, pros, cons, comments.",
+			"Fields": ["ReviewerName", "Rating", "Pros", "Cons", "Comments"]
+		}, {
+			"TemplateName": "Competitor Analysis Template",
+			"Description": "Competitor, product, strengths, weaknesses, market share.",
+			"Fields": ["Name", "Product", "Strengths", "Weaknesses", "MarketShare"]
+		}, {
+			"TemplateName": "Inventory Management",
+			"Description": "Item, quantity, location, supplier, reorder level.",
+			"Fields": ["ItemName", "Quantity", "Location", "Supplier", "ReorderLevel"]
+		}, {
+			"TemplateName": "Risk Assessment Planner",
+			"Description": "Risk, probability, impact, mitigation plan.",
+			"Fields": ["RiskDescription", "Probability", "Impact", "MitigationPlan"]
+		}, {
+			"TemplateName": "Translation Project Tracker",
+			"Description": "Source text, target language, translator, status.",
+			"Fields": ["SourceText", "TargetLanguage", "Translator", "Status", "Notes"]
+		}, {
+			"TemplateName": "Employee Onboarding Checklist",
+			"Description": "Task, owner, deadline, completion status.",
+			"Fields": ["TaskName", "Owner", "Deadline", "CompletionStatus", "Notes"]
+		}, {
+			"TemplateName": "Academic Research Organizer",
+			"Description": "Topic, hypothesis, sources, notes, citations.",
+			"Fields": ["Topic", "Hypothesis", "Sources", "Notes", "Citations"]
+		}, {
+			"TemplateName": "Event RSVP Tracker",
+			"Description": "Guest, RSVP status, meal preference, special requests.",
+			"Fields": ["Name", "RSVPStatus", "MealPreference", "SpecialRequests"]
+		}, {
+			"TemplateName": "Personal Goal Planner",
+			"Description": "Goal, action steps, deadline, progress, reflection.",
+			"Fields": ["Goal", "ActionSteps", "Deadline", "Progress", "Reflection"]
+		}
+	];
+	// Sort templates alphabetically (Rule 20)
+	templatesData.sort((a, b) => a.TemplateName.localeCompare(b.TemplateName));
+	// Global Select Lists
+	const listAudience = ["General Audience", "Beginners", "Students", "Professionals", "Executives", "Developers", "Engineers", "Researchers", "Business Owners", "Entrepreneurs", "Marketing Teams", "Product Managers", "Technical Teams", "Investors", "Policy Makers", "Educators"];
+	const listReasoning = ["Standard Reasoning", "Step-by-Step Reasoning", "Chain of Thought", "Structured Analysis", "Critical Thinking", "Comparative Analysis", "Root Cause Analysis", "First Principles Thinking", "Systems Thinking", "Scenario Analysis", "Decision Tree Reasoning", "Creative Thinking"];
+	const listFormat = ["Structured Text", "Bullet Points", "Numbered Steps", "Executive Summary", "Detailed Report", "Table", "Checklist", "JSON Structure", "Markdown Document", "Technical Specification", "Strategy Framework"];
+	const listLanguages = ["Amharic", "Arabic", "Azerbaijani", "Bengali", "Bhojpuri", "Bulgarian", "Burmese", "Catalan", "Chinese", "Croatian", "Czech", "Danish", "Dutch", "English", "Estonian", "Finnish", "French", "Georgian", "German", "Greek", "Gujarati", "Hausa", "Hebrew", "Hindi", "Hungarian", "Indonesian", "Italian", "Japanese", "Kannada", "Kazakh", "Korean", "Kyrgyz", "Latvian", "Lingala", "Lithuanian", "Malayalam", "Marathi", "Mongolian", "Nigerian Pidgin", "Norwegian", "Odia", "Pashto", "Persian", "Polish", "Portuguese", "Punjabi", "Romanian", "Russian", "Serbian", "Slovak", "Slovenian", "Spanish", "Swahili", "Swedish", "Tagalog", "Tamil", "Telugu", "Thai", "Turkish", "Turkmen", "Ukrainian", "Urdu", "Uzbek", "Vietnamese", "Yoruba"];
+	// Contextual Dropdowns mapping (Rule 9 & Rule 21)
+	const specificDropdowns = {
+		"Status": ["Not Started", "Pending", "In Progress", "On Hold", "Completed", "Published", "Archived"],
+		"Priority": ["Low", "Medium", "High", "Critical"],
+		"Rating": ["1 - Poor", "2 - Fair", "3 - Good", "4 - Very Good", "5 - Excellent"],
+		"Sentiment": ["Positive", "Neutral", "Negative", "Mixed"],
+		"FollowUpRequired": ["Yes", "No"],
+		"RSVPStatus": ["Attending", "Not Attending", "Maybe", "No Response"],
+		"Platform": ["Facebook", "Instagram", "YouTube", "TikTok", "WeChat (Weixin)", "Telegram", "Snapchat", "Reddit", "Douyin", "Kuaishou", "LinkedIn", "Pinterest", "Weibo", "X (Twitter)", "QQ", "Threads", "Quora", "Discord"]
+	};
+	// Current State
+	let customSectionCount = 0;
+	let generatedJSONObj = null;
+	let currentTemplateId = "no_template";
+	let pendingTemplateChangeData = null; // Stores data temporarily during warning
+	// --- 2. Initialization & DOM Population ---
+	document.addEventListener("DOMContentLoaded", () => {
+		populateSelect("targetAudience", listAudience);
+		populateSelect("reasoningMethod", listReasoning);
+		populateSelect("responseFormat", listFormat);
+		populateSelect("languageSelect", listLanguages);
+		// Set English as default language
+		document.getElementById("languageSelect").value = "English";
+		const tmplSelect = document.getElementById("templateSelect");
+		templatesData.forEach((tmpl, index) => {
+			let opt = document.createElement("option");
+			opt.value = index;
+			opt.textContent = tmpl.TemplateName;
+			tmplSelect.appendChild(opt);
+		});
+		tmplSelect.addEventListener("change", handleTemplateChangeRequest);
+	});
+
+	function populateSelect(id, optionsList) {
+		const select = document.getElementById(id);
+		optionsList.forEach(optVal => {
+			let opt = document.createElement("option");
+			opt.value = optVal;
+			opt.textContent = optVal;
+			select.appendChild(opt);
+		});
+	}
+	// --- 3. Template Change Logic with Data Preservation (Rule 19) ---
+	function getDynamicFormData() {
+		let data = {};
+		const inputs = document.querySelectorAll('#dynamicFieldsContainer input, #dynamicFieldsContainer textarea, #dynamicFieldsContainer select');
+		inputs.forEach(input => {
+			if(input.value && input.value.trim() !== "") {
+				data[input.name] = input.value.trim();
+			}
+		});
+		return data;
+	}
+
+	function handleTemplateChangeRequest(e) {
+		const newId = e.target.value;
+		const currentData = getDynamicFormData();
+		// Determine fields in the requested new template
+		const newFields = newId === "no_template" ? [] : templatesData[newId].Fields;
+		// Check for fields that exist in currentData but NOT in newFields
+		let lostFields = {};
+		let hasLostData = false;
+		let lostDataString = "";
+		for(const [key, val] of Object.entries(currentData)) {
+			if(!newFields.includes(key)) {
+				hasLostData = true;
+				lostFields[key] = val;
+				lostDataString += `${key.replace(/([A-Z])/g, ' $1').trim()}:\n${val}\n\n`;
+			}
+		}
+		if(hasLostData) {
+			// Store pending data and show modal
+			pendingTemplateChangeData = {
+				newId, currentData, lostDataString
+			};
+			document.getElementById("lostDataPreview").textContent = lostDataString.trim();
+			document.getElementById("warningModal").classList.remove("hidden");
+		} else {
+			// No data loss, proceed normally
+			applyTemplateChange(newId, currentData);
+		}
+	}
+
+	function confirmTemplateChange(action) {
+		if(!pendingTemplateChangeData) return;
+		// Capture data locally before asynchronous operations begin
+		const newId = pendingTemplateChangeData.newId;
+		const currentData = pendingTemplateChangeData.currentData;
+		const lostDataString = pendingTemplateChangeData.lostDataString;
+		// Hide modal and clear global state immediately
+		document.getElementById("warningModal").classList.add("hidden");
+		pendingTemplateChangeData = null;
+		if(action === 'copy') {
+			navigator.clipboard.writeText(lostDataString).then(() => {
+				showFeedback("✅ Lost data copied to clipboard!");
+				applyTemplateChange(newId, currentData);
+			}).catch(err => {
+				alert("Failed to copy text: " + err);
+				applyTemplateChange(newId, currentData);
+			});
+		} else if(action === 'proceed') {
+			applyTemplateChange(newId, currentData);
+		}
+	}
+
+	function cancelTemplateChange() {
+		// Revert select back to current template
+		document.getElementById("templateSelect").value = currentTemplateId;
+		document.getElementById("warningModal").classList.add("hidden");
+		pendingTemplateChangeData = null;
+	}
+
+	function applyTemplateChange(newId, savedData) {
+		currentTemplateId = newId;
+		const container = document.getElementById("dynamicFieldsContainer");
+		const section = document.getElementById("dynamicFieldsSection");
+		const descSpan = document.getElementById("templateDesc");
+		container.innerHTML = ""; // Clear existing
+		if(newId === "no_template") {
+			section.classList.add("hidden");
+			descSpan.textContent = "Custom Prompt Builder Active.";
+			return;
+		}
+		const tmpl = templatesData[newId];
+		descSpan.textContent = "Template Focus: " + tmpl.Description;
+		section.classList.remove("hidden");
+		const frag = document.createDocumentFragment();
+		tmpl.Fields.forEach(field => {
+			const group = document.createElement("div");
+			group.className = "form-group";
+			// Label
+			const label = document.createElement("label");
+			label.textContent = field.replace(/([A-Z])/g, ' $1').trim(); // Format CamelCase
+			// Help Text
+			const help = document.createElement("span");
+			help.className = "field-guidance";
+			help.textContent = getFieldHelpText(field);
+			let inputElement;
+			// Provide drop-down options where choices are limited
+			if(specificDropdowns[field]) {
+				inputElement = document.createElement("select");
+				let defOpt = document.createElement("option");
+				defOpt.value = "";
+				defOpt.textContent = "Select " + label.textContent + "...";
+				inputElement.appendChild(defOpt);
+				specificDropdowns[field].forEach(opt => {
+					let option = document.createElement("option");
+					option.value = opt;
+					option.textContent = opt;
+					inputElement.appendChild(option);
+				});
+			} else if(field.includes("Date") || field === "Timeline") {
+				inputElement = document.createElement("input");
+				inputElement.type = "date";
+			} else if(field.includes("Description") || field.includes("Content") || field.includes("Notes") || field.includes("Outline") || field.includes("Body") || field.includes("Text") || field.includes("Script") || field.includes("Items") || field.includes("Questions") || field.includes("Examples")) {
+				inputElement = document.createElement("textarea");
+				inputElement.placeholder = "Enter detailed " + label.textContent.toLowerCase() + " here...";
+			} else {
+				inputElement = document.createElement("input");
+				inputElement.type = "text";
+				inputElement.placeholder = "Enter " + label.textContent.toLowerCase() + "...";
+			}
+			inputElement.id = "dyn_" + field;
+			inputElement.name = field;
+			// Restore data if name matches (or field is shared between templates)
+			if(savedData && savedData[field]) {
+				inputElement.value = savedData[field];
+			}
+			group.appendChild(label);
+			group.appendChild(help);
+			group.appendChild(inputElement);
+			frag.appendChild(group);
+		});
+		container.appendChild(frag);
+	}
+
+	function getFieldHelpText(fieldName) {
+		const texts = {
+			"Title": "Provide a clear and concise title or headline.",
+			"Description": "Provide detailed background information or a thorough explanation.",
+			"TargetAudience": "Define the specific group of people this content is aimed at.",
+			"Status": "Indicate the current progress or state of this item.",
+			"Priority": "Select how urgent or important this task is.",
+			"Keywords": "List specific words or phrases the AI must include (comma separated).",
+			"Platform": "Where will this be published? (e.g., Twitter, LinkedIn, Internal Blog).",
+			"Notes": "Add any additional context, random thoughts, or specific rules here.",
+			"Budget": "Specify monetary constraints or allocations."
+		};
+		return texts[fieldName] || `Please enter the required information for ${fieldName.replace(/([A-Z])/g, ' $1').trim().toLowerCase()}. The AI will use this exactly as provided.`;
+	}
+	// --- 4. Custom Sections Logic (Rule 14) ---
+	function addCustomSection() {
+		if(customSectionCount >= 10) {
+			alert("Maximum of 10 custom sections allowed.");
+			return;
+		}
+		customSectionCount++;
+		document.getElementById("sectionCount").textContent = customSectionCount;
+		const container = document.getElementById("customSectionsContainer");
+		const div = document.createElement("div");
+		div.className = "custom-section-item";
+		div.id = `cs_wrapper_${customSectionCount}`;
+		div.innerHTML = `
+                <div class="remove-btn-wrapper">
+                    <button type="button" class="btn btn-danger" onclick="removeCustomSection(${customSectionCount})">Remove Section</button>
+                </div>
+                <div class="form-group">
+                    <label>Section Name</label>
+                    <span class="field-guidance">Name your section (e.g., 'Brand Tone', 'Negative Examples'). Max 255 chars.</span>
+                    <input type="text" id="cs_name_${customSectionCount}" maxlength="255" placeholder="e.g., Formatting Rules">
+                </div>
+                <div class="form-group">
+                    <label>Section Content</label>
+                    <span class="field-guidance">Provide the actual rules or information for the AI. Max 5100 chars.</span>
+                    <textarea id="cs_content_${customSectionCount}" maxlength="5100" placeholder="Type the detailed instructions here..." oninput="updateCharCount(this, ${customSectionCount})"></textarea>
+                    <div class="char-count"><span id="cs_count_${customSectionCount}">0</span> / 5100</div>
+                </div>
+            `;
+		container.appendChild(div);
+	}
+
+	function removeCustomSection(id) {
+		const elem = document.getElementById(`cs_wrapper_${id}`);
+		if(elem) {
+			elem.remove();
+			customSectionCount--;
+			document.getElementById("sectionCount").textContent = customSectionCount;
+		}
+	}
+
+	function updateCharCount(textarea, id) {
+		document.getElementById(`cs_count_${id}`).textContent = textarea.value.length;
+	}
+	// --- 5. Generate & Validate JSON (Rule 4, 15) ---
+	function generatePrompt() {
+		let taskName = "Custom Prompt";
+		let taskDesc = "User defined custom prompt.";
+		let promptFields = [];
+		if(currentTemplateId !== "no_template") {
+			const tmpl = templatesData[currentTemplateId];
+			taskName = tmpl.TemplateName;
+			taskDesc = tmpl.Description;
+			promptFields = tmpl.Fields;
+		}
+		// Build Base Object
+		const promptData = {
+			"SystemInstruction": "You are an expert AI assistant. Process the following structured prompt carefully. Adhere to the provided Reasoning Method, Language, and ensure the final output matches the requested Response Format. Use all provided Prompt Details and Additional Context to inform your response.",
+			"Task": {
+				"TemplateName": taskName,
+				"TaskDescription": taskDesc
+			},
+			"Configuration": {
+				"TargetAudience": document.getElementById("targetAudience").value,
+				"ReasoningMethod": document.getElementById("reasoningMethod").value,
+				"ResponseFormat": document.getElementById("responseFormat").value,
+				"Language": document.getElementById("languageSelect").value
+			},
+			"PromptDetails": {},
+			"AdditionalContext": {}
+		};
+		// Harvest Dynamic Fields
+		if(currentTemplateId !== "no_template") {
+			promptFields.forEach(field => {
+				const el = document.getElementById("dyn_" + field);
+				if(el) {
+					promptData.PromptDetails[field] = el.value.trim() || null;
+				}
+			});
+		} else {
+			delete promptData.PromptDetails; // Remove if empty
+		}
+		// Harvest Custom Sections
+		let hasCustomSections = false;
+		for(let i = 1; i <= 10; i++) {
+			const nameEl = document.getElementById(`cs_name_${i}`);
+			const contentEl = document.getElementById(`cs_content_${i}`);
+			if(nameEl && contentEl) {
+				let nameVal = nameEl.value.trim();
+				let contentVal = contentEl.value.trim();
+				if(nameVal || contentVal) {
+					hasCustomSections = true;
+					promptData.AdditionalContext[nameVal || `Section_${i}`] = contentVal || null;
+				}
+			}
+		}
+		if(!hasCustomSections) {
+			delete promptData.AdditionalContext;
+		}
+		// Validate and Stringify (Rule 4)
+		try {
+			const jsonString = JSON.stringify(promptData, null, 2);
+			JSON.parse(jsonString); // Quick parse check
+			document.getElementById("outputArea").textContent = jsonString;
+			generatedJSONObj = promptData;
+			showFeedback("✅ Prompt successfully generated!");
+		} catch(error) {
+			document.getElementById("outputArea").textContent = "Error generating JSON: " + error.message;
+			showFeedback("❌ Validation Error.");
+			generatedJSONObj = null;
+		}
+	}
+	// --- 6. Export Functions (Rule 3, 18) ---
+	function showFeedback(msg) {
+		const fb = document.getElementById("actionFeedback");
+		fb.textContent = msg;
+		setTimeout(() => {
+			fb.textContent = "";
+		}, 3000);
+	}
+
+	function copyJSON() {
+		const text = document.getElementById("outputArea").textContent;
+		if(!generatedJSONObj) {
+			alert("Generate a prompt first.");
+			return;
+		}
+		navigator.clipboard.writeText(text).then(() => {
+			showFeedback("✅ JSON copied to clipboard!");
+		}).catch(err => alert("Failed to copy text: " + err));
+	}
+
+	function copyMarkdown() {
+		if(!generatedJSONObj) {
+			alert("Generate a prompt first.");
+			return;
+		}
+		const mdText = generateMarkdown(generatedJSONObj);
+		navigator.clipboard.writeText(mdText).then(() => {
+			showFeedback("✅ Markdown copied to clipboard!");
+		}).catch(err => alert("Failed to copy text: " + err));
+	}
+
+	function downloadFile(type) {
+		if(!generatedJSONObj) {
+			alert("Generate a prompt first.");
+			return;
+		}
+		let content = "";
+		let filename = `Prompt_${generatedJSONObj.Task.TemplateName.replace(/\s+/g, '_')}`;
+		let mimeType = "";
+		if(type === 'json') {
+			content = JSON.stringify(generatedJSONObj, null, 2);
+			filename += ".json";
+			mimeType = "application/json";
+		} else if(type === 'markdown') {
+			content = generateMarkdown(generatedJSONObj);
+			filename += ".md";
+			mimeType = "text/markdown";
+		}
+		const blob = new Blob([content], {
+			type: mimeType
+		});
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		URL.revokeObjectURL(url);
+		showFeedback(`✅ Downloaded as ${type.toUpperCase()}`);
+	}
+
+	function generateMarkdown(obj) {
+		let md = `# AI Prompt: ${obj.Task.TemplateName}\n\n`;
+		md += `**Objective:** ${obj.Task.TaskDescription}\n\n`;
+		md += `## ⚙️ Configuration\n`;
+		md += `- **Target Audience:** ${obj.Configuration.TargetAudience}\n`;
+		md += `- **Reasoning Method:** ${obj.Configuration.ReasoningMethod}\n`;
+		md += `- **Response Format:** ${obj.Configuration.ResponseFormat}\n`;
+		md += `- **Language:** ${obj.Configuration.Language}\n\n`;
+		if(obj.PromptDetails && Object.keys(obj.PromptDetails).length > 0) {
+			md += `## 📝 Prompt Details\n`;
+			for(const [key, value] of Object.entries(obj.PromptDetails)) {
+				md += `### ${key.replace(/([A-Z])/g, ' $1').trim()}\n${value || '*Not provided*'}\n\n`;
+			}
+		}
+		if(obj.AdditionalContext && Object.keys(obj.AdditionalContext).length > 0) {
+			md += `## 📚 Additional Context\n`;
+			for(const [key, value] of Object.entries(obj.AdditionalContext)) {
+				md += `### ${key}\n${value || '*Not provided*'}\n\n`;
+			}
+		}
+		md += `\n---\n*System Instruction: ${obj.SystemInstruction}*`;
+		return md;
+	}</script></body></html>
