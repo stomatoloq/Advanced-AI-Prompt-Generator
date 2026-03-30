@@ -2,6 +2,9 @@
 
 **Advanced AI Prompt Generator** is a browser-based tool that helps users create **structured, optimized prompts for AI models** such as ChatGPT, Claude, Gemini, and other large language models.
 
+## Interface
+<img src="generator-interface.png" width="100%">
+
 Instead of writing prompts manually, the generator guides the user through a structured interface where they define:
 
 * the **task**
@@ -40,6 +43,8 @@ The generator ensures that the AI understands:
 * **who the output is for**
 * **how the result should be formatted**
 
+## Demo: Template Selection, Generated Prompt, JSON / Markdown Output
+<img src="template-selection.png" width="100%">
 ---
 
 # Key Features
